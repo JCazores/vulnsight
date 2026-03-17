@@ -1,0 +1,662 @@
+<?php
+
+use App\Http\Controllers\AdminController;
+use App\Models\Scan;
+use App\Models\User;
+use App\Models\Vulnerability;
+use App\Models\ScanLog;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Route;
+use Illuminate\Validation\ValidationException;
+
+// ─────────────────────────────────────────────────────────────
+//  OTP ENDPOINTS (public — no auth required)
+// ─────────────────────────────────────────────────────────────
+Route::post('/otp/send', function (Request $request) {
+    $data = $request->validate([
+        'email' => ['required', 'email'],
+    ]);
+    $email = strtolower(trim($data['email']));
+    $rateLimitKey = "otp_rate_{$email}";
+    if (Cache::has($rateLimitKey)) {
+        return response()->json(['message' => 'Please wait before requesting another code.'], 429);
+    }
+    $code = str_pad(random_int(0, 999999), 6, '0', STR_PAD_LEFT);
+    Cache::put("otp_{$email}", $code, now()->addMinutes(10));
+    Cache::put($rateLimitKey, true, now()->addSeconds(60));
+    try {
+        Mail::raw(
+            "Your VulnSight verification code is: {$code}\n\nThis code expires in 10 minutes.\n\nIf you did not request this, ignore this email.",
+            function ($message) use ($email, $code) {
+                $message->to($email)
+                    ->subject("VulnSight — Your verification code: {$code}");
+            }
+        );
+    } catch (\Exception $e) {
+        Log::warning("OTP email failed to send to {$email}: " . $e->getMessage());
+        Log::info("OTP code for {$email}: {$code}");
+    }
+    return response()->json(['ok' => true]);
+});
+
+Route::post('/otp/verify', function (Request $request) {
+    $data = $request->validate([
+        'email' => ['required', 'email'],
+        'code' => ['required', 'string', 'size:6'],
+    ]);
+    $email = strtolower(trim($data['email']));
+    $stored = Cache::get("otp_{$email}");
+    if (!$stored || $stored !== $data['code']) {
+        throw ValidationException::withMessages([
+            'code' => ['Invalid or expired verification code.'],
+        ]);
+    }
+    Cache::forget("otp_{$email}");
+    return response()->json(['verified' => true]);
+});
+
+// ─────────────────────────────────────────────────────────────
+//  AUTH ENDPOINTS
+// ─────────────────────────────────────────────────────────────
+Route::post('/register', function (Request $request) {
+    $data = $request->validate([
+        'name' => ['required', 'string', 'max:255'],
+        'email' => ['required', 'email', 'unique:users,email'],
+        'password' => ['required', 'min:8', 'confirmed'],
+    ]);
+    $user = User::create([
+        'name' => $data['name'],
+        'email' => $data['email'],
+        'password' => Hash::make($data['password']),
+    ]);
+    Auth::login($user, remember: true);
+    $request->session()->regenerate();
+    return response()->json([
+        'id' => $user->id,
+        'name' => $user->name,
+        'email' => $user->email,
+        'role' => $user->role ?? 'user',
+        'is_admin' => (bool) ($user->is_admin ?? false),
+    ]);
+});
+
+Route::post('/login', function (Request $request) {
+    $credentials = $request->validate([
+        'email' => ['required', 'email'],
+        'password' => ['required'],
+    ]);
+    if (!Auth::attempt($credentials, remember: true)) {
+        throw ValidationException::withMessages([
+            'email' => ['Invalid email or password.'],
+        ]);
+    }
+    $request->session()->regenerate();
+    $user = Auth::user();
+    $user->forceFill(['last_active_at' => now()])->save();
+    return response()->json([
+        'id' => $user->id,
+        'name' => $user->name,
+        'email' => $user->email,
+        'role' => $user->role ?? 'user',
+        'is_admin' => (bool) ($user->is_admin ?? false),
+    ]);
+});
+
+Route::get('/me', function (Request $request) {
+    if (!Auth::check()) {
+        return response()->json(['message' => 'Unauthenticated.'], 401);
+    }
+    $user = Auth::user();
+    return response()->json([
+        'id' => $user->id,
+        'name' => $user->name,
+        'email' => $user->email,
+        'role' => $user->role ?? 'user',
+        'is_admin' => (bool) ($user->is_admin ?? false),
+    ]);
+});
+
+Route::post('/logout', function (Request $request) {
+    if (Auth::check()) {
+        Auth::user()->forceFill(['last_active_at' => null])->save();
+    }
+    Auth::logout();
+    $request->session()->invalidate();
+    $request->session()->regenerateToken();
+    return response()->json(['ok' => true]);
+});
+
+// ─────────────────────────────────────────────────────────────
+//  USER-FACING SCAN ENDPOINTS (authenticated users)
+// ─────────────────────────────────────────────────────────────
+Route::middleware('auth:web')->group(function () {
+
+    // Heartbeat
+    Route::post('/heartbeat', function (Request $request) {
+        Auth::user()->forceFill(['last_active_at' => now()])->save();
+        return response()->json(['ok' => true]);
+    });
+
+    // List user's own scans
+    Route::get('/scans', function (Request $request) {
+        return response()->json(
+            Auth::user()->scans()->latest()->get()
+        );
+    });
+
+    // Create a new scan
+    Route::post('/scans', function (Request $request) {
+        $data = $request->validate(['name' => ['required', 'string', 'max:500']]);
+        $scan = Auth::user()->scans()->create([
+            'name' => $data['name'],
+            'status' => 'idle',
+        ]);
+        return response()->json($scan, 201);
+    });
+
+    // Update scan status/progress
+    Route::patch('/scans/{scan}', function (Request $request, Scan $scan) {
+        if ($scan->user_id !== Auth::id())
+            abort(403);
+        $scan->update(array_filter([
+            'status' => $request->input('status'),
+            'progress' => $request->input('progress'),
+        ], fn($v) => $v !== null));
+        return response()->json(['ok' => true]);
+    });
+
+    // Store vulnerabilities found during a scan
+    Route::post('/scans/{scan}/vulnerabilities', function (Request $request, Scan $scan) {
+        if ($scan->user_id !== Auth::id())
+            abort(403);
+        $vulns = $request->input('vulnerabilities', []);
+        foreach ($vulns as $v) {
+            $scan->vulnerabilities()->create([
+                'name' => $v['name'] ?? 'Unknown',
+                'url' => $v['url'] ?? '—',
+                'severity' => $v['severity'] ?? 'low',
+                'cve' => $v['cve'] ?? null,
+                'evidence' => $v['evidence'] ?? null,
+                'solution' => $v['solution'] ?? null,
+            ]);
+        }
+        return response()->json(['ok' => true, 'stored' => count($vulns)]);
+    });
+
+    // Targets for a scan
+    Route::get('/scans/{scan}/targets', function (Scan $scan) {
+        if ($scan->user_id !== Auth::id())
+            abort(403);
+        return response()->json($scan->targets()->get());
+    });
+
+    Route::post('/scans/{scan}/targets', function (Request $request, Scan $scan) {
+        if ($scan->user_id !== Auth::id())
+            abort(403);
+        $data = $request->validate(['url' => ['required', 'url', 'max:2048'], 'type' => ['sometimes']]);
+        return response()->json($scan->targets()->create($data), 201);
+    });
+
+    Route::delete('/scans/{scan}/targets/{targetId}', function (Scan $scan, int $targetId) {
+        if ($scan->user_id !== Auth::id())
+            abort(403);
+        $scan->targets()->where('id', $targetId)->delete();
+        return response()->json(null, 204);
+    });
+
+    // Credentials
+    Route::post('/scans/{scan}/credentials', function (Request $request, Scan $scan) {
+        if ($scan->user_id !== Auth::id())
+            abort(403);
+        $key = "scan_{$scan->id}_credentials";
+        $creds = cache()->get($key, []);
+        $creds[] = $request->only(['name', 'type', 'token']);
+        cache()->put($key, $creds, now()->addDays(7));
+        return response()->json(['ok' => true], 201);
+    });
+
+    // Config for a scan
+    Route::put('/scans/{scan}/config', function (Request $request, Scan $scan) {
+        if ($scan->user_id !== Auth::id())
+            abort(403);
+        $scan->config()->updateOrCreate(
+            ['scan_id' => $scan->id],
+            $request->only([
+                'intensity',
+                'max_requests_per_second',
+                'request_timeout',
+                'crawl_depth',
+                'follow_redirects',
+                'javascript_execution',
+                'exclusion_rules',
+            ])
+        );
+        return response()->json(['ok' => true]);
+    });
+
+    // ─────────────────────────────────────────────────────────
+    //  SCAN START — dispatches RunScanJob to queue
+    //  Nuclei + Nikto + HeaderScanner + ExposedPathScanner
+    //  + StaticCodeScanner + DependencyScanner all run here.
+    //  ZAP has been removed.
+    // ─────────────────────────────────────────────────────────
+
+    Route::post('/scans/{scan}/start', function (Request $request, Scan $scan) {
+        if ($scan->user_id !== Auth::id()) {
+            return response()->json(['message' => 'Forbidden'], 403);
+        }
+
+        if ($scan->status === 'running') {
+            return response()->json(['message' => 'Scan already running'], 409);
+        }
+
+        if (!$scan->targets()->exists()) {
+            return response()->json(['message' => 'Add at least one target before starting'], 422);
+        }
+
+        // Ownership check
+        $target = $scan->targets()->first();
+        $verifier = new \App\Services\OwnershipVerifier();
+        if ($target && !$verifier->isPrivateOrLocalhost($target->url) && !$target->ownership_verified) {
+            return response()->json([
+                'message' => 'Target ownership not verified.',
+                'detail' => 'Verify you own this target before scanning.',
+                'target_url' => $target->url,
+                'verify_url' => "/api/scans/{$scan->id}/targets/{$target->id}/ownership-token",
+            ], 403);
+        }
+
+        \App\Jobs\RunScanJob::dispatch($scan);
+
+        return response()->json(['message' => 'Scan started', 'scan' => $scan->fresh()]);
+    });
+
+    // ─────────────────────────────────────────────────────────
+    //  SCAN STATUS — frontend polls this for progress updates
+    // ─────────────────────────────────────────────────────────
+
+    Route::get('/scans/{scan}/status', function (Scan $scan) {
+        if ($scan->user_id !== Auth::id()) {
+            return response()->json(['message' => 'Forbidden'], 403);
+        }
+
+        $scan->loadCount('vulnerabilities');
+        $counts = $scan->vulnCountBySeverity();
+
+        return response()->json([
+            'id' => $scan->id,
+            'status' => $scan->status,
+            'progress' => (int) ($scan->progress ?? 0),
+            'current_phase' => $scan->current_phase ?? '',
+            'requests_sent' => (int) ($scan->requests_sent ?? 0),
+            'urls_discovered' => (int) ($scan->urls_discovered ?? 0),
+            'new_vulns' => $scan->vulnerabilities()
+                ->where('is_new', true)
+                ->orderByDesc('created_at')
+                ->limit(20)
+                ->get(['id', 'name', 'severity', 'url', 'cve', 'description', 'solution', 'evidence', 'created_at']),
+            'vuln_counts' => [
+                'critical' => $counts['critical'] ?? 0,
+                'high' => $counts['high'] ?? 0,
+                'medium' => $counts['medium'] ?? 0,
+                'low' => $counts['low'] ?? 0,
+                'total' => array_sum($counts),
+            ],
+        ]);
+    });
+
+    // ─────────────────────────────────────────────────────────
+    //  LEGACY ZAP STUBS — kept so old frontend JS doesn't 500
+    //  These return a clean "use /start instead" response.
+    // ─────────────────────────────────────────────────────────
+
+    Route::post('/scans/{scan}/zap/start', function (Request $request, Scan $scan) {
+        if ($scan->user_id !== Auth::id()) {
+            return response()->json(['message' => 'Forbidden'], 403);
+        }
+
+        // Save target URL if frontend sends it in the request body
+        $targetUrl = $request->input('target_url');
+        if ($targetUrl && !$scan->targets()->where('url', $targetUrl)->exists()) {
+            $scan->targets()->create(['url' => $targetUrl]);
+        }
+
+        if (!$scan->targets()->exists()) {
+            return response()->json(['message' => 'No target URL provided'], 422);
+        }
+
+        if ($scan->status === 'running') {
+            return response()->json(['message' => 'Scan already running'], 409);
+        }
+
+        \App\Jobs\RunScanJob::dispatch($scan);
+
+        return response()->json([
+            'message' => 'Scan started',
+            'spider_id' => '0',
+            'scan_id' => '0',
+            'target_url' => $targetUrl ?? $scan->targets()->value('url'),
+            'scan' => $scan->fresh(),
+        ]);
+    });
+
+    Route::get('/scans/{scan}/zap/status', function (Scan $scan) {
+        if ($scan->user_id !== Auth::id()) {
+            return response()->json(['message' => 'Forbidden'], 403);
+        }
+
+        // Pull unseen vulns from DB and mark them seen so they only appear once
+        $newVulns = $scan->vulnerabilities()
+            ->where('is_new', true)
+            ->orderBy('created_at')
+            ->get()
+            ->map(function ($v) {
+                return [
+                    'id' => $v->id,
+                    'alert' => $v->name,
+                    'name' => $v->name,
+                    'url' => $v->url,
+                    'sev' => $v->severity,
+                    'severity' => $v->severity,
+                    'risk' => $v->severity,
+                    'description' => $v->description,
+                    'solution' => $v->solution ?? $v->remediation,
+                    'evidence' => $v->evidence,
+                    'cve' => $v->cve,
+                    'method' => $v->method ?? 'GET',
+                    'pluginId' => $v->plugin_id,
+                    'confidence' => $v->confidence ?? 2,
+                    'source' => 'scanner',
+                ];
+            })->values()->all();
+
+        // Mark as seen so next poll doesn't re-return them
+        if (!empty($newVulns)) {
+            $scan->vulnerabilities()->where('is_new', true)->update(['is_new' => false]);
+        }
+
+        $status = $scan->status;
+        $progress = (int) ($scan->progress ?? 0);
+
+        // If completed, force 100%
+        if ($status === 'completed')
+            $progress = 100;
+
+        return response()->json([
+            'progress' => $progress,
+            'status' => $status,
+            'new_vulns' => $newVulns,
+            'requests_sent' => (int) ($scan->requests_sent ?? 0),
+            'urls_discovered' => (int) ($scan->urls_discovered ?? 0),
+            'spider_done' => true,
+        ]);
+    });
+});
+
+// ─────────────────────────────────────────────────────────────
+//  SCAN LOG ROUTES — per-scan-run history stored in DB
+// ─────────────────────────────────────────────────────────────
+Route::middleware('auth:web')->group(function () {
+
+    // GET /api/scan-logs — list all scan runs for current user
+    Route::get('/scan-logs', function () {
+        try {
+            $logs = ScanLog::where('user_id', Auth::id())
+                ->orderByDesc('created_at')
+                ->limit(100)
+                ->get();
+            $mapped = $logs->map(function ($l) {
+                try {
+                    return $l->toFrontend();
+                } catch (\Throwable $e) {
+                    Log::warning('ScanLog::toFrontend() failed #' . $l->id . ': ' . $e->getMessage());
+                    return [
+                        'id' => $l->id,
+                        'scan_id' => $l->scan_id,
+                        'target_url' => $l->target_url ?? '',
+                        'status' => $l->status ?? 'unknown',
+                        'created_at' => optional($l->created_at)->toISOString()
+                    ];
+                }
+            });
+            return response()->json($mapped);
+        } catch (\Throwable $e) {
+            Log::error('GET /api/scan-logs failed: ' . $e->getMessage());
+            return response()->json(['message' => 'Failed to load scan history.'], 500);
+        }
+    });
+
+    // POST /api/scan-logs — create log row when scan starts
+    Route::post('/scan-logs', function (Request $request) {
+        $validated = $request->validate([
+            'scan_id' => 'required|integer|exists:scans,id',
+            'target_url' => 'required|string|max:2048',
+        ]);
+
+        $log = ScanLog::create([
+            'scan_id' => $validated['scan_id'],
+            'user_id' => Auth::id(),
+            'target_url' => $validated['target_url'],
+            'status' => 'running',
+            'started_at' => now(),
+        ]);
+
+        return response()->json(['scan_log_id' => $log->id]);
+    });
+
+    // GET /api/scan-logs/{id} — single log with all vulnerabilities
+    Route::get('/scan-logs/{id}', function ($id) {
+        $log = ScanLog::with('vulnerabilities')
+            ->where('id', $id)
+            ->where('user_id', Auth::id())
+            ->firstOrFail();
+
+        return response()->json($log->toFrontend());
+    });
+
+    // PATCH /api/scan-logs/{id} — update progress/status during scan
+    Route::patch('/scan-logs/{id}', function (Request $request, $id) {
+        $log = ScanLog::where('id', $id)
+            ->where('user_id', Auth::id())
+            ->firstOrFail();
+
+        $data = $request->only([
+            'status',
+            'progress',
+            'requests_sent',
+            'urls_discovered',
+            'zap_spider_id',
+            'zap_scan_id',
+        ]);
+
+        $log->update($data);
+
+        if (isset($data['status']) && $data['status'] === 'completed') {
+            $log->markCompleted();
+        } elseif (isset($data['status']) && in_array($data['status'], ['failed', 'stopped'])) {
+            $now = now();
+            $log->update([
+                'completed_at' => $now,
+                'duration_seconds' => $log->started_at
+                    ? (int) $log->started_at->diffInSeconds($now)
+                    : null,
+            ]);
+            $log->syncVulnCounts();
+        }
+
+        return response()->json(['ok' => true]);
+    });
+
+    // POST /api/scan-logs/{id}/vulnerabilities — save findings for this scan run
+    Route::post('/scan-logs/{id}/vulnerabilities', function (Request $request, $id) {
+        $log = ScanLog::where('id', $id)
+            ->where('user_id', Auth::id())
+            ->firstOrFail();
+
+        $vulns = $request->input('vulnerabilities', []);
+        if (empty($vulns)) {
+            return response()->json(['saved' => 0]);
+        }
+
+        $saved = 0;
+        foreach ($vulns as $v) {
+            // Deduplicate within this scan run
+            $exists = Vulnerability::where('scan_log_id', $log->id)
+                ->where('name', $v['name'] ?? '')
+                ->where('url', $v['url'] ?? '')
+                ->exists();
+
+            if (!$exists) {
+                Vulnerability::create([
+                    'scan_id' => $log->scan_id,
+                    'scan_log_id' => $log->id,
+                    'name' => $v['name'] ?? 'Unknown',
+                    'url' => $v['url'] ?? '',
+                    'severity' => $v['severity'] ?? 'low',
+                    'cve' => $v['cve'] ?? null,
+                    'evidence' => $v['evidence'] ?? null,
+                    'remediation' => $v['solution'] ?? null,
+                    'description' => $v['description'] ?? null,
+                    'status' => 'open',
+                    'is_new' => true,
+                ]);
+                $saved++;
+            }
+        }
+
+        $log->syncVulnCounts();
+
+        Log::info('ScanLog vulns saved', [
+            'scan_log_id' => $log->id,
+            'saved' => $saved,
+            'total' => $log->fresh()->vuln_total,
+        ]);
+
+        return response()->json(['saved' => $saved]);
+    });
+
+    // DELETE /api/scan-logs/{id} — delete scan log, keep vulnerabilities
+    Route::delete('/scan-logs/{id}', function ($id) {
+        $log = ScanLog::where('id', $id)
+            ->where('user_id', Auth::id())
+            ->firstOrFail();
+
+        // Null out scan_log_id so vulns stay in the scans table
+        Vulnerability::where('scan_log_id', $log->id)
+            ->update(['scan_log_id' => null]);
+
+        $log->delete();
+
+        return response()->json(['ok' => true]);
+    });
+
+});
+
+// ─────────────────────────────────────────────────────────────
+//  ADMIN ENDPOINTS
+// ─────────────────────────────────────────────────────────────
+Route::prefix('admin')->middleware('auth:web')->group(function () {
+
+    Route::get('/stats', [AdminController::class, 'stats']);
+
+    // Users
+    Route::get('/users', [AdminController::class, 'users']);
+    Route::post('/users', [AdminController::class, 'createUser']);
+    Route::patch('/users/{id}', [AdminController::class, 'updateUser']);
+    Route::post('/users/{id}/ban', [AdminController::class, 'banUser']);
+    Route::post('/users/{id}/unban', [AdminController::class, 'unbanUser']);
+
+    // Scans
+    Route::get('/scans', [AdminController::class, 'scans']);
+    Route::get('/scans/{id}', [AdminController::class, 'scan']);
+    Route::get('/scans/{id}/vulnerabilities', [AdminController::class, 'scanVulnerabilities']);
+    Route::post('/scans/{id}/stop', [AdminController::class, 'stopScan']);
+    Route::post('/scans/{id}/retry', [AdminController::class, 'retryScan']);
+    Route::post('/scans/pause-all', [AdminController::class, 'pauseAllScans']);
+    Route::delete('/scans/purge', [AdminController::class, 'purgeScans']);
+
+    // Vulnerabilities
+    Route::get('/vulnerabilities', [AdminController::class, 'vulnerabilities']);
+
+    // Health & Cache
+    Route::get('/health', [AdminController::class, 'health']);
+    Route::post('/cache/flush', [AdminController::class, 'flushCache']);
+
+    // Settings
+    Route::get('/settings', [AdminController::class, 'getSettings']);
+    Route::put('/settings', [AdminController::class, 'saveSettings']);
+    Route::post('/settings/maintenance', function (Request $request) {
+        $enabled = $request->boolean('enabled');
+        $settings = Cache::get('platform_settings', []);
+        $settings['maintenance_mode'] = $enabled;
+        Cache::put('platform_settings', $settings);
+        return response()->json(['maintenance_mode' => $enabled]);
+    });
+
+    // Audit log
+    Route::get('/audit-log', function () {
+        $cacheKey = 'admin_audit_log';
+        if (!Cache::has($cacheKey)) {
+            $entries = collect();
+            Scan::with('user')->latest()->limit(50)->get()->each(function ($scan) use (&$entries) {
+                if ($scan->status === 'completed') {
+                    $entries->push([
+                        'ts' => $scan->updated_at?->format('Y-m-d H:i:s') ?? now()->format('Y-m-d H:i:s'),
+                        'actor' => $scan->user?->email ?? 'system',
+                        'action' => "Scan completed — {$scan->name} ({$scan->vulnerabilities_count} vulnerabilities found)",
+                        'sev' => $scan->vulnerabilities_count > 0 ? 'warn' : 'info',
+                    ]);
+                } elseif ($scan->status === 'failed') {
+                    $entries->push([
+                        'ts' => $scan->updated_at?->format('Y-m-d H:i:s') ?? now()->format('Y-m-d H:i:s'),
+                        'actor' => $scan->user?->email ?? 'system',
+                        'action' => "Scan failed — {$scan->name}",
+                        'sev' => 'critical',
+                    ]);
+                }
+            });
+            User::latest()->limit(20)->get()->each(function ($user) use (&$entries) {
+                $entries->push([
+                    'ts' => $user->created_at?->format('Y-m-d H:i:s') ?? now()->format('Y-m-d H:i:s'),
+                    'actor' => 'system',
+                    'action' => "User account created — {$user->email} (role: " . ($user->role ?? 'user') . ')',
+                    'sev' => 'info',
+                ]);
+            });
+            $entries->push([
+                'ts' => now()->format('Y-m-d H:i:s'),
+                'actor' => 'system',
+                'action' => 'Admin panel initialised — audit log started',
+                'sev' => 'info',
+            ]);
+            $sorted = $entries->sortByDesc('ts')->values()->toArray();
+            Cache::put($cacheKey, $sorted, now()->addDays(30));
+        }
+        return response()->json(Cache::get($cacheKey, []));
+    });
+
+    Route::post('/audit-log', function (Request $request) {
+        $cacheKey = 'admin_audit_log';
+        $entry = [
+            'ts' => now()->format('Y-m-d H:i:s'),
+            'actor' => $request->input('actor', Auth::user()?->email ?? 'system'),
+            'action' => $request->input('action', ''),
+            'sev' => $request->input('sev', 'info'),
+        ];
+        $existing = Cache::get($cacheKey, []);
+        array_unshift($existing, $entry);
+        $existing = array_slice($existing, 0, 1000);
+        Cache::put($cacheKey, $existing, now()->addDays(30));
+        return response()->json(null, 201);
+    });
+
+    Route::delete('/audit-log', function () {
+        Cache::forget('admin_audit_log');
+        return response()->json(['ok' => true]);
+    });
+});

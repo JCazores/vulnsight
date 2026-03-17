@@ -1,0 +1,1000 @@
+  946  CSP: script-src unsafe-inline	http://localhost/	medium	● Confirmed	08:27:29	Details →
+  947  CSP: script-src unsafe-inline	http://localhost/sitemap.xml	medium	● Confirmed	08:27:29	Details →
+  948  CSP: script-src unsafe-inline	http://localhost	medium	● Confirmed	08:27:29
+  949  curl -s "http://localhost:8080/JSON/core/action/newSession/?apikey=my-very-secret-zap-key-123&overwrite=true"
+  950  sudo nano /etc/apache2/conf-available/security.conf
+  951  tail -15 storage/logs/laravel.log
+  952  grep -n "port 80 spider found nothing\|newSession\|seedUrlIntoZap" app/Services/Scanner/ZapScanner.php | head -10
+  953  curl -s "http://localhost:8080/JSON/spider/view/results/?apikey=my-very-secret-zap-key-123&scanId=0" | python3 -m json.tool | head -20
+  954  curl -sI http://localhost:8000 | grep -i "location\|302\|301"
+  955  curl -s "http://localhost:8080/JSON/spider/action/scan/?apikey=my-very-secret-zap-key-123&url=http://localhost:8000/login&recurse=true"
+  956  sleep 5
+  957  curl -s "http://localhost:8080/JSON/core/view/urls/?apikey=my-very-secret-zap-key-123" | python3 -m json.tool
+  958  cd ~
+  959  sudo snap install nuclei
+  960  sudo apt install golang-go -y
+  961  go install -v github.com/projectdiscovery/nuclei/v3/cmd/nuclei@latest
+  962  export PATH=$PATH:~/go/bin
+  963  echo 'export PATH=$PATH:~/go/bin' >> ~/.bashrc
+  964  nuclei -version
+  965  pkill -f "zap.jar"
+  966  pkill -f "zap.sh"
+  967  ps aux | grep zap | grep -v grep
+  968  rm -rf ~/Documents/WORKSPACE/wavs2026/ZAP_2.17.0
+  969  cd ~/Documents/WORKSPACE/wavs2026
+  970  sed -i '/#ZAP/d' .env
+  971  sed -i '/ZAP_URL/d' .env
+  972  sed -i '/ZAP_KEY/d' .env
+  973  sed -i '/ZAP_API_KEY/d' .env
+  974  sed -i '/WAVS_ZAP/d' .env
+  975  grep -i zap .env
+  976  ps aux | grep zap | grep -v grep
+  977  jeycee@jeycee:~/Documents/WORKSPACE/wavs2026$ ps aux | grep zap | grep -v grep
+  978  jeycee     10109  0.7 12.4 7108324 983152 pts/0  Sl   Feb28   8:28 java -Xmx1g -jar /home/jeycee/Documents/WORKSPACE/wavs2026/ZAP_2.17.0/zap-2.17.0.jar -daemon -port 8080 -host 0.0.0.0 -config api.key=my-very-secret-zap-key-123 -config api.addrs.addr.name=.* -config api.addrs.addr.regex=true
+  979  jeycee@j
+  980  kill 10109
+  981  sleep 3
+  982  ps aux | grep zap | grep -v grep
+  983  rm -rf ~/Documents/WORKSPACE/wavs2026/ZAP_2.17.0
+  984  cd ~/Documents/WORKSPACE/wavs2026
+  985  sed -i '/#ZAP/d' .env
+  986  sed -i '/ZAP_URL/d' .env
+  987  sed -i '/ZAP_KEY/d' .env
+  988  sed -i '/ZAP_API_KEY/d' .env
+  989  sed -i '/WAVS_ZAP/d' .env
+  990  grep -i zap .env
+  991  php artisan config:clear
+  992  ps aux | grep zap | grep -v grep
+  993  nuclei -update-templates
+  994  cd 
+  995  nuclei -update-templates
+  996  php artisan serve &
+  997  cd /Documents/WORKSPACE/wavs2026
+  998  ls
+  999  cd Documents/
+ 1000  cd WORKSPACE/wavs2026/
+ 1001  php artisan serve &
+ 1002  nuclei -u http://localhost:8000 -tags laravel,php,exposure -severity low,medium,high,critical -silent
+ 1003  composer require --dev vimeo/psalm
+ 1004  composer require --dev psalm/plugin-laravel
+ 1005  ./vendor/bin/psalm --init
+ 1006  ./vendor/bin/psalm-plugin enable psalm/plugin-laravel
+ 1007  ./vendor/bin/psalm --taint-analysis --no-progress
+ 1008  jeycee@jeycee:~/Documents/WORKSPACE/wavs2026$ ./vendor/bin/psalm --init
+ 1009  Psalm has detected issues in your platform:
+ 1010  Psalm requires a PHP version ">= 8.3.16". You are running 8.3.6.
+ 1011  jeycee@jeycee:~/Documents/WORKSPACE/wavs2026$ ./vendor/bin/psalm-plugin enable psalm/plugin-laravel
+ 1012  Psalm has detected issues in your platform:
+ 1013  Psalm requires a PHP version ">= 8.3.16". You are running 8.3.6.
+ 1014  jeycee@jeycee:~/Documents/WORKSPACE/wavs2026$ ./vendor/bin/psalm --taint-analysis --no-progress
+ 1015  Psalm has detected issues in your platform:
+ 1016  Psalm requires a PHP version ">= 8.3.16". You are running 8.3.6.
+ 1017  sudo apt update
+ 1018  sudo apt install php8.3 -y
+ 1019  php -v
+ 1020  composer remove --dev vimeo/psalm psalm/plugin-laravel
+ 1021  jeycee@jeycee:~/Documents/WORKSPACE/wavs2026$ composer remove --dev vimeo/psalm psalm/plugin-laravel
+ 1022  ./composer.json has been updated
+ 1023  Running composer update vimeo/psalm psalm/plugin-laravel
+ 1024  Loading composer repositories with package information
+ 1025  Updating dependencies
+ 1026  Lock file operations: 0 installs, 0 updates, 37 removals
+ 1027  Writing lock file
+ 1028  Installing dependencies from lock file (including require-dev)
+ 1029  Package operations: 0 installs, 0 updates, 37 removals
+ 1030  > Illuminate\Foundation\ComposerScripts::prePackageUninstall
+ 1031  Generating optimized autoload files
+ 1032  Class App\Services\Modules\SecurityHeadersModule located in ./app/Services/Scanner/Modules/SecurityHeadersModule.php does not comply with psr-4 autoloading standard. Skipping.
+ 1033  Class App\Services\Modules\BaseModule located in ./app/Services/Scanner/Modules/BaseModule.php does not comply with psr-4 autoloading standard. Skipping.
+ 1034  Class App\Services\Modules\CsrfModule located in ./app/Services/Scanner/Modules/CsrfModule.php does not comply with psr-4 autoloading standard. Skipping.
+ 1035  Class App\Http\Controllers\ScanConfigController located in ./app/Http/Controllers/Api/ScanConfigController.php does not comply with psr-4 autoloading standard. Skipping.
+ 1036  Class App\Http\Middleware\UpdateLastActive located in ./app/Http/Middleware/Updatelastactive.php does not comply with psr-4 autoloading standard. Skipping.
+ 1037  Class App\Console\Commands\MergeResultsCommand located in ./app/Commands/MergeResultsCommand.php does not comply with psr-4 autoloading standard. Skipping.
+ 1038  Class App\Console\Commands\RunScanCommand located in ./app/Commands/RunScanCommand.php does not comply with psr-4 autoloading standard. Skipping.
+ 1039  In ClassLoader.php line 576:
+ 1040  remove [--dev] [--dry-run] [--no-progress] [--no-update] [--no-install] [--no-audit] [--audit-format AUDIT-FORMAT] [--update-no-dev] [-w|--update-with-dependencies] [-W|--update-with-all-dependencies] [--with-all-dependencies] [--no-update-with-dependencies] [-m|--minimal-changes] [--unused] [--ignore-platform-req IGNORE-PLATFORM-REQ] [--ignore-platform-reqs] [-o|--optimize-autoloader] [-a|--classmap-authoritative] [--apcu-autoloader] [--apcu-autoloader-prefix APCU-AUTOLOADER-PREFIX] [--] [<packages>...]
+ 1041  composer dump-autoload
+ 1042  composer require --dev vimeo/psalm:^5.26 psalm/plugin-laravel:^2.10
+ 1043  composer require --dev vimeo/psalm:^5.26
+ 1044  composer require --dev vimeo/psalm:^5.26 -W
+ 1045  nuclei -u http://localhost:8000 -tags laravel,php,exposure -severity medium,high,critical -silent
+ 1046  php artisan queue:work --timeout=600 --tries=1 --once 2>&1
+ 1047  tail -50 storage/logs/laravel.log | grep -A3 "ScanOrchestrator\|Scanner\|scan #"
+ 1048  php artisan tinker --execute="
+ 1049      \$log = \App\Models\ScanLog::latest()->first();
+ 1050      echo 'ScanLog: ' . json_encode([
+ 1051          'id'         => \$log?->id,
+ 1052          'scan_id'    => \$log?->scan_id,
+ 1053          'target_url' => \$log?->target_url,
+ 1054          'status'     => \$log?->status,
+ 1055          'vuln_total' => \$log?->vuln_total,
+ 1056      ]);
+ 1057  "
+ 1058  php artisan tinker --execute="
+ 1059      \$scan = \App\Models\Scan::latest()->first();
+ 1060      echo 'Scan: ' . json_encode([
+ 1061          'id'      => \$scan?->id,
+ 1062          'status'  => \$scan?->status,
+ 1063          'targets' => \$scan?->targets()->pluck('url'),
+ 1064      ]);
+ 1065  "
+ 1066  [200~jeycee@jeycee:~/Documents/WORKSPACE/wavs2026$ php artisan queue:work --timeout=600 --tries=1 --once 2>&1
+ 1067  jeycee@jeycee:~/Documents/WORKSPACE/wavs2026$ tail -50 storage/logs/laravel.log | grep -A3 "ScanOrchestrator\|Scanner\|scan #"
+ 1068  [2026-03-01 06:09:50] production.INFO: ScanOrchestrator: saved 65 findings to scan_log #33  
+ 1069  [2026-03-01 06:09:54] production.INFO: ScanLog vulns saved {"scan_log_id":33,"saved":3,"total":68} 
+ 1070  [2026-03-01 06:11:41] production.INFO: ScanOrchestrator: saved 2 findings to scan_log #33  
+ 1071  [2026-03-01 06:11:45] production.INFO: ScanLog vulns saved {"scan_log_id":33,"saved":0,"total":70} 
+ 1072  [2026-03-01 06:12:13] production.INFO: ScanOrchestrator: saved 3 findings to scan_log #33  
+ 1073  [2026-03-01 06:12:17] production.INFO: ScanLog vulns saved {"scan_log_id":33,"saved":0,"total":73} 
+ 1074  [2026-03-01 06:37:53] production.ERROR: Class "Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider" not found {"exception":"[object] (Error(code: 0): Class \"Barryvdh\\LaravelIdeHelper\\IdeHelperServiceProvider\" not found at /home/jeycee/Documents/WORKSPACE/wavs2026/vendor/laravel/framework/src/Illuminate/Foundation/Application.php:1034)
+ 1075  [stacktrace]
+ 1076  --
+ 1077  [2026-03-01 11:36:23] production.INFO: RunScanJob: starting scan #38  
+ 1078  [2026-03-01 11:36:23] production.INFO: ScanOrchestrator: scan #38 started {"target":"","scan_log_id":36} 
+ 1079  [2026-03-01 11:36:23] production.INFO: DependencyScanner: no vulnerable packages found  
+ 1080  [2026-03-01 11:36:24] production.INFO: ScanOrchestrator: saved 13 findings to scan_log #36  
+ 1081  [2026-03-01 11:36:24] production.INFO: ScanOrchestrator: Psalm not installed — skipping taint analysis  
+ 1082  [2026-03-01 11:36:24] production.INFO: ScanOrchestrator: Nuclei not installed — skipping active scan  
+ 1083  [2026-03-01 11:36:24] production.INFO: ScanOrchestrator: scan #38 completed {"total_vulns":13} 
+ 1084  [2026-03-01 11:36:24] production.INFO: RunScanJob: scan #38 done {"scan_log_id":36,"status":"completed"} 
+ 1085  [2026-03-01 11:37:12] production.INFO: RunScanJob: starting scan #39  
+ 1086  [2026-03-01 11:37:12] production.INFO: ScanOrchestrator: scan #39 started {"target":"","scan_log_id":38} 
+ 1087  [2026-03-01 11:37:12] production.INFO: DependencyScanner: no vulnerable packages found  
+ 1088  [2026-03-01 11:37:12] production.INFO: ScanOrchestrator: saved 13 findings to scan_log #38  
+ 1089  [2026-03-01 11:37:12] production.INFO: ScanOrchestrator: Psalm not installed — skipping taint analysis  
+ 1090  [2026-03-01 11:37:12] production.INFO: ScanOrchestrator: Nuclei not installed — skipping active scan  
+ 1091  [2026-03-01 11:37:12] production.INFO: ScanOrchestrator: scan #39 completed {"total_vulns":13} 
+ 1092  [2026-03-01 11:37:12] production.INFO: RunScanJob: scan #39 done {"scan_log_id":38,"status":"completed"} 
+ 1093  jeycee@jeycee:~/Documents/WORKSPACE/wavs2026$ php artisan tinker --execute="
+ 1094  "
+ 1095  ScanLog: {"id":38,"scan_id":39,"target_url":"","status":"completed","vuln_total":13}
+ 1096  jeycee@jeycee:~/Documents/WORKSPACE/wavs2026$ php artisan tinker --execute="
+ 1097  "
+ 1098  Scan: {"id":39,"status":"completed","targets":[]}
+ 1099  exit
+ 1100  clear
+ 1101  which nuclei
+ 1102  echo "NUCLEI_PATH=$(which nuclei)" >> .env
+ 1103  lsof -i :8000
+ 1104  clear
+ 1105  echo "NUCLEI_PATH=$(which nuclei)" >> .env
+ 1106  which nuclie
+ 1107  which nuclei
+ 1108  echo "NUCLEI_PATH=$(which nuclei)" >> .env
+ 1109  cd Documents/WORKSPACE/wavs2026/
+ 1110  php artisan serve
+ 1111  [200~php artisan route:list --path=api/scans | head -30
+ 1112  php artisan config:clear
+ 1113  php artisan route:list --path=api/scans | head -30
+ 1114  php artisan config:clear
+ 1115  php artisan cache:clear
+ 1116  clear
+ 1117  ls app/Services/Scanner/
+ 1118  ls app/Jobs/RunScanJob.php
+ 1119  php artisan migrate:status | grep scanner
+ 1120  grep QUEUE_CONNECTION .env
+ 1121  redis-cli ping
+ 1122  curl -s http://localhost:8080/JSON/core/view/version/ | head -5
+ 1123  which nikto
+ 1124  cd ZAP_2.17.0/
+ 1125  curl -s http://localhost:8080/JSON/core/view/version/ | head -5
+ 1126  cd ..
+ 1127  sed -i 's/QUEUE_CONNECTION=redis/QUEUE_CONNECTION=database/' .env
+ 1128  php artisan queue:table
+ 1129  php artisan migrate
+ 1130  php artisan config:clear
+ 1131  curl -s "http://localhost:8080/JSON/core/view/version/"
+ 1132  grep -r "api.key" ~/.ZAP/ 2>/dev/null
+ 1133  grep -r "api.key" ~/ZAP* 2>/dev/null
+ 1134  echo "ZAP_API_KEY=my-very-secret-zap-key-123" >> .env
+ 1135  php artisan config:clear
+ 1136  curl -s "http://localhost:8080/JSON/core/view/version/?apikey=my-very-secret-zap-key-123"
+ 1137  sed -i 's/QUEUE_CONNECTION=redis/QUEUE_CONNECTION=database/' .env
+ 1138  php artisan queue:table
+ 1139  php artisan migrate
+ 1140  php artisan config:clear
+ 1141  grep QUEUE_CONNECTION .env
+ 1142  grep ZAP .env
+ 1143  curl -s "http://localhost:8080/JSON/core/view/version/?apikey=my-very-secret-zap-key-123"
+ 1144  php artisan tinker --execute="
+ 1145      \$res = \Illuminate\Support\Facades\Http::timeout(3)
+ 1146          ->get('http://localhost:8080/JSON/core/view/version/', ['apikey' => 'my-very-secret-zap-key-123']);
+ 1147      echo \$res->status() . ': ' . \$res->body();
+ 1148  "
+ 1149  grep ZAP_URL .env
+ 1150  grep -r "ZAP\|zap\|8080" resources/js/ | grep -v "node_modules" | head -20
+ 1151  curl "http://localhost:8080/JSON/core/view/version/?apikey=my-very-secret-zap-key-123"
+ 1152  find . -name "*.py" | grep -v __pycache__ | head -30
+ 1153  cd ~/Documents/WORKSPACE/wavs2026 && find . -name "*.py" | grep -v __pycache__ | head -30
+ 1154  ls
+ 1155  find app -name "*.php" | xargs grep -l -i "zap"
+ 1156  cat config/services.php | grep -A5 zap
+ 1157  tail -50 storage/logs/laravel.log
+ 1158  cat app/Services/Scanner/ScanOrchestrator.php
+ 1159  grep -rn "refineAppSizeIfSpiderDone" app/
+ 1160  php artisan config:clear
+ 1161  php artisan cache:clear
+ 1162  sudo nano /etc/apache2/apache2.conf
+ 1163  php artisan config:clear
+ 1164  php artisan cache:clear
+ 1165  php artisan optimize:clear
+ 1166  curl -s "http://localhost:8080/JSON/core/action/newSession/?apikey=my-very-secret-zap-key-123&overwrite=true"
+ 1167  grep -n "newSession" routes/api.php
+ 1168  tail -10 storage/logs/laravel.log
+ 1169  curl -s http://localhost:8000 | head -5
+ 1170  curl -s "http://localhost:8080/JSON/spider/view/status/?apikey=my-very-secret-zap-key-123&scanId=0"
+ 1171  curl -s "http://localhost:8080/JSON/core/view/urls/?apikey=my-very-secret-zap-key-123" | python3 -m json.tool | head -20
+ 1172  grep -n "getActiveTargetUrls\|localhost\|targetUrl" public/wavs.js | grep -v "^Binary" | head -15
+ 1173  php artisan tinker --execute="echo \App\Models\Scan::latest()->first()->zap_target;"
+ 1174  grep -n "localhost:8000\|localhost'" public/wavs.js | head -10
+ 1175  php artisan optimize:clear
+ 1176  php artisan make:migration add_ownership_to_targets --table=targets
+ 1177  php artisan migrate
+ 1178  php artisan config:clear
+ 1179  php artisan cache:clear
+ 1180  php artisan config:clear
+ 1181  php artisan cache:clear
+ 1182  php artisan config:clear
+ 1183  php artisan cache:clear
+ 1184  php artisan make:migration create_otp_codes_table
+ 1185  php artisan make_migration create_scan_targets_table
+ 1186  php artisan make:migration create_scan_targets_table
+ 1187  php artisan make:migration create_scan_credentials_table
+ 1188  php artisan make:migration create_scan_logs_table
+ 1189  php artisan make:migration create_scan_vulnerabilities_table
+ 1190  php artisan migrate
+ 1191  php artisan tinker
+ 1192  php artisan migrate --pretend
+ 1193  php artisan migrate
+ 1194  php artisan config:clear && php artisan cache:clear
+ 1195  tail -50 storage/logs/laravel.log
+ 1196  grep "local.ERROR" storage/logs/laravel.log | tail -5
+ 1197  tail -100 storage/logs/laravel.log | grep -A 5 "local.ERROR" | tail -20
+ 1198  grep "local.ERROR" storage/logs/laravel.log | tail -1
+ 1199  tail -20 storage/logs/laravel.log
+ 1200  # Clear cached views (stale compiled views cause silent 500s)
+ 1201  php artisan view:clear
+ 1202  php artisan config:clear
+ 1203  php artisan route:clear
+ 1204  php artisan cache:clear
+ 1205  tail -30 storage/logs/laravel.log
+ 1206  grep "APP_DEBUG\|LOG_CHANNEL\|LOG_LEVEL" .env
+ 1207  ls -la storage/logs/
+ 1208  tail -30 storage/logs/laravel-2026-03-01.log
+ 1209  sed -i 's/APP_DEBUG=false/APP_DEBUG=true/' .env
+ 1210  php artisan config:clear
+ 1211  cat app/Http/Middleware/SecurityHeaders.php
+ 1212  php artisan config:clear
+ 1213  php artisan cache:clear
+ 1214  /home/jeycee/go/bin/nuclei --version
+ 1215  tail -f storage/logs/laravel.log
+ 1216  clear
+ 1217  tail -f storage/logs/laravel.log | grep -A 3 "local.ERROR"
+ 1218  tail -f storage/logs/laravel.log
+ 1219  php artisan make:migration add_scanner_columns_to_vulnerabilities --table=vulnerabilities
+ 1220  php artisan migrate
+ 1221  php artisan config:clear
+ 1222  php artisan queue:work --timeout=600 --tries=1
+ 1223  clear
+ 1224  php artisan queue:work --timeout=600 --tries=1
+ 1225  clear
+ 1226  php artisan queue:work --timeout=600 --tries=1
+ 1227  clear
+ 1228  php artisan queue:work --timeout=600 --tries=1
+ 1229  php artisan queue:work --timeout=600 --tries=1 -vvv
+ 1230  clear
+ 1231  php artisan queue:work --timeout=600 --tries=1
+ 1232  clear
+ 1233  php artisan queue:work --timeout=600 --tries=1
+ 1234  clear
+ 1235  php artisan queue:work --timeout=600 --tries=1
+ 1236  clear
+ 1237  php artisan queue:work --timeout=600 --tries=1 &
+ 1238  kill -9 $(ps aux | grep "queue:work" | grep -v grep | awk '{print $2}')
+ 1239  php artisan queue:work --timeout=600 --tries=1 &
+ 1240  kill -9 $(ps aux | grep "queue:work" | grep -v grep | awk '{print $2}')
+ 1241  php artisan queue:work --timeout=600 --tries=1 &
+ 1242  php artisan serve
+ 1243  php artisan config:clear
+ 1244  php artisan cache:clear
+ 1245  php artisan view:clear
+ 1246  php artisan route:clear
+ 1247  php artisan serve
+ 1248  lsof -i :8000
+ 1249  kill -9 480673
+ 1250  lsof -i :8000
+ 1251  kill -9 282513
+ 1252  kill -9 480359
+ 1253  kill -9 480672
+ 1254  lsof -i :8000
+ 1255  php artisan serve
+ 1256  lsof -i :8000
+ 1257  kill -9 492364
+ 1258  kill -9 493921
+ 1259  lsof -i :8000
+ 1260  php artisan serve
+ 1261  php artisan queue:table
+ 1262  php artisan migrate
+ 1263  php artisan config:cache
+ 1264  php artisan serve
+ 1265  php artisan config:clear
+ 1266  php artisan cache:clear
+ 1267  php artisan view:clear
+ 1268  redis-cli ping
+ 1269  sed -i 's/REDIS_CLIENT=predis/REDIS_CLIENT=file/' .env
+ 1270  sed -i 's/CACHE_STORE=database/CACHE_STORE=file/' .env
+ 1271  php artisan config:clear
+ 1272  php artisan cache:clear
+ 1273  php artisan view:clear
+ 1274  php artisan route:clear
+ 1275  php artisan config:clear
+ 1276  php artisan route:clear
+ 1277  php artisan view:clear
+ 1278  php artisan make:migration remove_zap_add_phase --table=vulnerabilities
+ 1279  php artisan migrate
+ 1280  php artisan view:clear
+ 1281  php artisan route:clear
+ 1282  php artisan config:clear
+ 1283  php --version
+ 1284  php artisan tinker --execute="
+ 1285      \App\Models\Scan::latest()->limit(5)->get(['id','status'])->each(function(\$s) {
+ 1286          echo 'Scan #'.\$s->id.' targets: '.\$s->targets()->count().PHP_EOL;
+ 1287      });
+ 1288  "
+ 1289  # Check what target URLs are being saved
+ 1290  php artisan tinker --execute="
+ 1291      \App\Models\Scan::latest()->limit(5)->get(['id'])->each(function(\$s) {
+ 1292          \$targets = \$s->targets()->pluck('url');
+ 1293          echo 'Scan #'.\$s->id.': '.\$targets->implode(', ').PHP_EOL;
+ 1294      });
+ 1295  "
+ 1296  grep -n "localhost\|target_url\|targetUrl\|zap/start" resources/js/ -r | grep -v "node_modules" | head -30
+ 1297  grep -n "excludeScanner\|NucleiScanner" ~/Documents/WORKSPACE/wavs2026/app/Services/Scanner/StaticCodeScanner.php | head -5
+ 1298  php artisan tinker --execute="
+ 1299      \App\Models\Vulnerability::truncate();
+ 1300      \App\Models\ScanLog::truncate();
+ 1301      \App\Models\Scan::truncate();
+ 1302      echo 'Cleared all scan data';
+ 1303  "
+ 1304  php artisan tinker --execute="
+ 1305      DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+ 1306      \App\Models\Vulnerability::truncate();
+ 1307      \App\Models\ScanLog::truncate();
+ 1308      \App\Models\Scan::truncate();
+ 1309      DB::statement('SET FOREIGN_KEY_CHECKS=1;');
+ 1310      echo 'Cleared all scan data';
+ 1311  "
+ 1312  grep -A15 "excludeScanner" app/Services/Scanner/StaticCodeScanner.php
+ 1313  php artisan tinker --execute="
+ 1314      \App\Models\Vulnerability::where('url', 'like', 'source://app/Services/Scanner/%')
+ 1315          ->pluck('url')
+ 1316          ->unique()
+ 1317          ->each(fn(\$u) => print(\$u.PHP_EOL));
+ 1318  "
+ 1319  php artisan tinker --execute="
+ 1320      DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+ 1321      \App\Models\Vulnerability::truncate();
+ 1322      \App\Models\ScanLog::truncate();
+ 1323      \App\Models\Scan::truncate();
+ 1324      DB::statement('SET FOREIGN_KEY_CHECKS=1;');
+ 1325      echo 'Cleared';
+ 1326  "
+ 1327  sed -i "s/'ExposedPathScanner.php',/'ExposedPathScanner.php',\n        'OwnershipVerifier.php',\n        'OwnershipController.php',\n        'ScanController.php',\n        'RunScanJob.php',/" app/Services/Scanner/StaticCodeScanner.php
+ 1328  grep "excludeScanner" -A20 app/Services/Scanner/StaticCodeScanner.php | head -20
+ 1329  find . -name "StaticCodeScanner.php" -not -path "*/vendor/*"
+ 1330  grep -n "basename\|excludeScanner" app/Services/Scanner/StaticCodeScanner.php
+ 1331  sed -i 's/if (in_array($basename, $this->excludeScanner, true))\n                continue;/if (in_array($basename, $this->excludeScanner, true)) continue 2;/' app/Services/Scanner/StaticCodeScanner.php
+ 1332  python3 << 'EOF'
+ 1333  with open('app/Services/Scanner/StaticCodeScanner.php', 'r') as f:
+ 1334      content = f.read()
+ 1335  # Fix: continue needs to be continue 2 to exit the outer foreach loop
+ 1336  old = """            $basename = basename($file);
+ 1337              if (in_array($basename, $this->excludeScanner, true))
+ 1338                  continue;"""
+ 1339  new = """            $basename = basename($file);
+ 1340              if (in_array($basename, $this->excludeScanner, true)) continue 2;"""
+ 1341  if old in content:
+ 1342      content = content.replace(old, new)
+ 1343      with open('app/Services/Scanner/StaticCodeScanner.php', 'w') as f:
+ 1344          f.write(content)
+ 1345      print("Fixed: continue → continue 2")
+ 1346  else:
+ 1347      # Try alternate formatting
+ 1348      print("Pattern not found, current basename lines:")
+ 1349      for i, line in enumerate(content.split('\n')):
+ 1350          if 'basename' in line or 'excludeScanner' in line.lower():
+ 1351              print(f"  {i}: {repr(line)}")
+ 1352  EOF
+ 1353  php artisan tinker --execute="
+ 1354      DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+ 1355      \App\Models\Vulnerability::truncate();
+ 1356      \App\Models\ScanLog::truncate();
+ 1357      \App\Models\Scan::truncate();
+ 1358      DB::statement('SET FOREIGN_KEY_CHECKS=1;');
+ 1359      echo 'Cleared';
+ 1360  "
+ 1361  php artisan config:clear && php artisan cache:clear
+ 1362  php artisan tinker --execute="
+ 1363      DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+ 1364      \App\Models\Vulnerability::truncate();
+ 1365      \App\Models\ScanLog::truncate();
+ 1366      \App\Models\Scan::truncate();
+ 1367      DB::statement('SET FOREIGN_KEY_CHECKS=1;');
+ 1368      echo 'Cleared';
+ 1369  "
+ 1370  python3 << 'EOF'
+ 1371  with open('app/Services/Scanner/StaticCodeScanner.php', 'r') as f:
+ 1372      content = f.read()
+ 1373  # Replace the entire getPhpFiles loop in scan() with one that excludes scanner files at the directory level
+ 1374  old = """        foreach ($this->getPhpFiles($directory) as $file) {
+ 1375              foreach ($this->excludeFiles as $skip) {
+ 1376                  if (str_contains($file, $skip)) continue 2;
+ 1377              }
+ 1378              $basename = basename($file);
+ 1379              if (in_array($basename, $this->excludeScanner, true)) continue 2;
+ 1380              try {"""
+ 1381  new = """        foreach ($this->getPhpFiles($directory) as $file) {
+ 1382              // Skip test files
+ 1383              $skip = false;
+ 1384              foreach ($this->excludeFiles as $ex) {
+ 1385                  if (str_contains($file, $ex)) { $skip = true; break; }
+ 1386              }
+ 1387              if ($skip) continue;
+ 1388              // Skip scanner's own files — they use shell_exec/eval intentionally
+ 1389              if (in_array(basename($file), $this->excludeScanner, true)) continue;
+ 1390              try {"""
+ 1391  if old in content:
+ 1392      content = content.replace(old, new)
+ 1393      with open('app/Services/Scanner/StaticCodeScanner.php', 'w') as f:
+ 1394          f.write(content)
+ 1395      print("Fixed loop structure")
+ 1396  else:
+ 1397      print("Pattern not found — showing scan() method:")
+ 1398      start = content.find('public function scan(')
+ 1399      print(content[start:start+800])
+ 1400  EOF
+ 1401  php artisan tinker --execute="
+ 1402      \App\Models\Vulnerability::latest()->limit(5)->get(['id','url','name'])->each(function(\$v) {
+ 1403          echo \$v->url . PHP_EOL;
+ 1404      });
+ 1405  "
+ 1406  php artisan tinker --execute="
+ 1407      DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+ 1408      DB::table('vulnerabilities')->delete();
+ 1409      DB::table('scan_log_vulnerabilities')->delete();
+ 1410      DB::table('scan_logs')->delete();
+ 1411      DB::table('scan_targets')->delete();
+ 1412      DB::table('scans')->delete();
+ 1413      DB::statement('SET FOREIGN_KEY_CHECKS=1;');
+ 1414      echo 'All cleared: ' . DB::table('vulnerabilities')->count() . ' vulns remaining';
+ 1415  "
+ 1416  php artisan tinker --execute="
+ 1417      DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+ 1418      DB::table('vulnerabilities')->delete();
+ 1419      DB::table('scan_log_vulnerabilities')->delete();
+ 1420      DB::table('scan_logs')->delete();
+ 1421      DB::table('targets')->delete();
+ 1422      DB::table('scans')->delete();
+ 1423      DB::statement('SET FOREIGN_KEY_CHECKS=1;');
+ 1424      echo 'Cleared: ' . DB::table('vulnerabilities')->count() . ' vulns remaining';
+ 1425  "
+ 1426  sed -i 's/if (in_array($basename, $this->excludeScanner, true)) continue 2;/if (in_array($basename, $this->excludeScanner, true)) continue;/' app/Services/Scanner/StaticCodeScanner.php
+ 1427  grep -n "excludeScanner" app/Services/Scanner/StaticCodeScanner.php
+ 1428  tail -30 storage/logs/laravel.log | grep -A5 "ERROR\|FAIL\|exception"
+ 1429  php artisan tinker --execute="
+ 1430      \App\Models\Vulnerability::latest()->limit(5)->get(['id','name','url','severity'])->each(function(\$v) {
+ 1431          echo \$v->severity . ' | ' . \$v->name . ' | ' . \$v->url . PHP_EOL;
+ 1432      });
+ 1433  "
+ 1434  php artisan tinker --execute="
+ 1435      DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+ 1436      DB::table('vulnerabilities')->delete();
+ 1437      DB::table('scan_log_vulnerabilities')->delete();
+ 1438      DB::table('scan_logs')->delete();
+ 1439      DB::table('targets')->delete();
+ 1440      DB::table('scans')->delete();
+ 1441      DB::statement('SET FOREIGN_KEY_CHECKS=1;');
+ 1442      echo 'Cleared';
+ 1443  "
+ 1444  grep -n "continue" app/Services/Scanner/StaticCodeScanner.php | head -10
+ 1445  ls -la ~/Documents/WORKSPACE/wavs2026/public/.htaccess
+ 1446  rm ~/Documents/WORKSPACE/wavs2026/public/.htaccess
+ 1447  which nuclei
+ 1448  echo "NUCLEI_PATH=/home/jeycee/go/bin/nuclei" >> .env
+ 1449  php artisan config:clear
+ 1450  rm ~/Documents/WORKSPACE/wavs2026/public/.htaccess
+ 1451  grep NUCLEI_PATH .env
+ 1452  php artisan tinker --execute="
+ 1453      \$scanner = new \App\Services\Scanner\NucleiScanner();
+ 1454      echo 'Available: ' . (\$scanner->isAvailable() ? 'YES' : 'NO') . PHP_EOL;
+ 1455  "
+ 1456  grep -n "nucleiBin\|NUCLEI_PATH" ~/Documents/WORKSPACE/wavs2026/app/Services/Scanner/NucleiScanner.php | head -5
+ 1457  head -20 ~/Documents/WORKSPACE/wavs2026/app/Services/Scanner/NucleiScanner.php
+ 1458  php artisan tinker --execute="
+ 1459      \$scanner = new \App\Services\Scanner\NucleiScanner();
+ 1460      echo 'Available: ' . (\$scanner->isAvailable() ? 'YES' : 'NO') . PHP_EOL;
+ 1461      \$findings = \$scanner->scan('http://localhost:8000', 30);
+ 1462      echo 'Findings: ' . count(\$findings) . PHP_EOL;
+ 1463  "
+ 1464  nuclei -u http://localhost:8000 -tags laravel,php,exposure,misconfig,headers -severity low,medium,high,critical -silent -v 2>&1 | head -30
+ 1465  tail -20 storage/logs/laravel.log | grep -i "nuclei\|phase\|scanning"
+ 1466  python3 << 'EOF'
+ 1467  with open('app/Services/Scanner/NucleiScanner.php', 'r') as f:
+ 1468      content = f.read()
+ 1469  # Remove the -duc flag that doesn't exist in v3.7.0
+ 1470  content = content.replace("'-duc',                     // disable update check\n                ", "")
+ 1471  # Also remove -stats-interval which may also not exist
+ 1472  content = content.replace("'-stats-interval', '30',    // log progress every 30s\n                ", "")
+ 1473  with open('app/Services/Scanner/NucleiScanner.php', 'w') as f:
+ 1474      f.write(content)
+ 1475  print("Fixed")
+ 1476  EOF
+ 1477  grep -n "duc\|stats-interval" app/Services/Scanner/NucleiScanner.php
+ 1478  jeycee@jeycee:~/Documents/WORKSPACE/wavs2026$ python3 << 'EOF'
+ 1479  with open('app/Services/Scanner/NucleiScanner.php', 'r') as f:
+ 1480      content = f.read()
+ 1481  # Remove the -duc flag that doesn't exist in v3.7.0
+ 1482  content = content.replace("'-duc',                     // disable update check\n                ", "")
+ 1483  # Also remove -stats-interval which may also not exist
+ 1484  content = content.replace("'-stats-interval', '30',    // log progress every 30s\n                ", "")
+ 1485  with open('app/Services/Scanner/NucleiScanner.php', 'w') as f:
+ 1486      f.write(content)
+ 1487  print("Fixed")
+ 1488  EOF
+ 1489  Fixed
+ 1490  jeycee@jeycee:~/Documents/WORKSPACE/wavs2026$ grep -n "duc\|stats-interval" app/Services/Scanner/NucleiScanner.php
+ 1491  106:                '-stats-interval',
+ 1492  238:            return 'Set APP_DEBUG=false and APP_ENV=production in .env for production.';
+ 1493  266:                'Set APP_ENV=production in .env',
+ 1494  grep -n "duc\|stats-interval" app/Services/Scanner/NucleiScanner.php
+ 1495  echo "---"
+ 1496  nuclei -u http://localhost:8000 -tags laravel,php,exposure,misconfig,headers -severity low,medium,high,critical -silent -timeout 10 -bulk-size 10 -rate-limit 50 2>&1 | head -10
+ 1497  sed -n '100,115p' app/Services/Scanner/NucleiScanner.php
+ 1498  jeycee@jeycee:~/Documents/WORKSPACE/wavs2026$ sed -n '100,115p' app/Services/Scanner/NucleiScanner.php
+ 1499  grep -n "stats-interval" app/Services/Scanner/NucleiScanner.php && echo "still there" || echo "gone"
+ 1500  sed -i "/-stats-interval'/d" app/Services/Scanner/NucleiScanner.php
+ 1501  sed -i "/'30',    \/\/ log progress every/d" app/Services/Scanner/NucleiScanner.php
+ 1502  grep -n "stats-interval" app/Services/Scanner/NucleiScanner.php && echo "still there" || echo "gone"
+ 1503  tail -10 storage/logs/laravel.log | grep -i nuclei
+ 1504  jeycee@jeycee:~/Documents/WORKSPACE/wavs2026$ tail -10 storage/logs/laravel.log | grep -i nuclei
+ 1505  [2026-03-01 12:28:39] production.INFO: NucleiScanner: finished (exit code 2)  
+ 1506  [2026-03-01 12:28:39] production.INFO: NucleiScanner: no findings output file — clean result  
+ 1507  [2026-03-01 12:28:39] production.INFO: ScanOrchestrator: Nuclei found 0 confirmed findings 
+ 1508  sed -n '85,115p' app/Services/Scanner/NucleiScanner.php
+ 1509  sed -i "/-silent',                  \/\/ no banner noise/d" app/Services/Scanner/NucleiScanner.php
+ 1510  grep -n "silent\|json\|no-color" app/Services/Scanner/NucleiScanner.php
+ 1511  tail -10 storage/logs/laravel.log | grep -i nuclei
+ 1512  /home/jeycee/go/bin/nuclei   -u 'http://localhost:8000'   -tags 'sqli,xss,lfi,rce,ssrf,redirect,exposure,misconfig,laravel,php,headers,cve'   -severity 'low,medium,high,critical'   -o /tmp/nuclei_test.json   -json   -no-color   -timeout 10   -bulk-size 10   -rate-limit 50 2>&1 | head -20
+ 1513  echo "Exit: $?"
+ 1514  sed -i "s/'-json',/'-jsonl',/" app/Services/Scanner/NucleiScanner.php
+ 1515  grep -n "jsonl\|json" app/Services/Scanner/NucleiScanner.php | head -5
+ 1516  /home/jeycee/go/bin/nuclei   -u 'http://localhost:8000'   -tags 'sqli,xss,lfi,rce,ssrf,redirect,exposure,misconfig,laravel,php,headers,cve'   -severity 'low,medium,high,critical'   -o /tmp/nuclei_test.json   -jsonl   -no-color   -timeout 10   -bulk-size 10   -rate-limit 50 2>&1 | tail -5
+ 1517  echo "Exit: $?"
+ 1518  cat /tmp/nuclei_test.json 2>/dev/null | head -5 || echo "No output file"
+ 1519  php artisan tinker --execute="
+ 1520      DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+ 1521      DB::table('vulnerabilities')->delete();
+ 1522      DB::table('scan_log_vulnerabilities')->delete();
+ 1523      DB::table('scan_logs')->delete();
+ 1524      DB::table('targets')->delete();
+ 1525      DB::table('scans')->delete();
+ 1526      DB::statement('SET FOREIGN_KEY_CHECKS=1;');
+ 1527      echo 'Cleared';
+ 1528  "
+ 1529  tail -20 storage/logs/laravel.log | grep -i "nuclei\|exit\|timeout"
+ 1530  grep -n "exec\|proc_open\|shell_exec\|timeout\|maxTime" app/Services/Scanner/NucleiScanner.php | head -10
+ 1531  nuclei -update-templates
+ 1532  tail -20 storage/logs/laravel.log | grep -i "nuclei\|exit\|timeout"
+ 1533  grep -n "exec\|proc_open\|shell_exec\|timeout\|maxTime" app/Services/Scanner/NucleiScanner.php | head -10
+ 1534  cp ~/Downloads/NucleiScanner.php ~/Documents/WORKSPACE/wavs2026/app/Services/Scanner/NucleiScanner.php
+ 1535  grep -n "isLocalTarget\|stderr\|duc" app/Services/Scanner/NucleiScanner.php
+ 1536  nuclei -u http://localhost:8000 -tags "headers,misconfig,exposure,laravel,php,debug" -severity low,medium,high,critical -json -duc -no-color 2>&1 | head -30
+ 1537  nuclei -version
+ 1538  nuclei -h 2>&1 | grep -i "json\|output\|format"
+ 1539  php artisan optimize:clear
+ 1540  nuclei -u http://localhost:8000   -tags "headers,misconfig,exposure,laravel,php,debug"   -severity low,medium,high,critical   -jle /tmp/nuclei_test.json   -nc -duc 2>&1 | tail -5
+ 1541  cat /tmp/nuclei_test.json 2>/dev/null | head -5
+ 1542  php artisan optimize:clear
+ 1543  grep -A3 "NucleiScanner: running" storage/logs/laravel.log | tail -20
+ 1544  grep -n "no findings output file" app/Services/Scanner/NucleiScanner.php
+ 1545  tail -f storage/logs/laravel.log | grep -i "nuclei"
+ 1546  grep -r "NucleiScanner" bootstrap/cache/ 2>/dev/null | head -5
+ 1547  composer dump-autoload
+ 1548  php artisan optimize:clear
+ 1549  php artisan config:clear
+ 1550  php artisan cache:clear
+ 1551  md5sum app/Services/Scanner/NucleiScanner.php
+ 1552  sed -n '204,208p' app/Services/Scanner/NucleiScanner.php
+ 1553  ps aux | grep -i "queue:work\|artisan"
+ 1554  grep -r "NucleiScanner\|ScanOrchestrator\|RunScanCommand" app/Jobs/ app/Commands/ app/Http/Controllers/ 2>/dev/null | grep -v "Binary" | head -20
+ 1555  kill -9 20024 24907 30345 419569
+ 1556  ps aux | grep "queue:work" | grep -v grep
+ 1557  tail -f storage/logs/laravel.log | grep -i "nuclei"
+ 1558  grep -i "saved\|found\|phase\|header\|psalm\|nikto\|static\|depend" storage/logs/laravel.log | grep "12:58\|13:00" | head -30
+ 1559  # Check if vulnerabilities are actually in the DB
+ 1560  php artisan tinker --execute="echo \App\Models\Vulnerability::where('scan_id', 14)->count();"
+ 1561  grep "BROADCAST\|CACHE_\|QUEUE_\|SESSION_" .env
+ 1562  # Check what's set
+ 1563  grep -E "^BROADCAST|^CACHE_DRIVER|^SESSION_DRIVER|^QUEUE_CONNECTION" .env
+ 1564  sed -i 's/^BROADCAST_DRIVER=redis/BROADCAST_DRIVER=log/' .env
+ 1565  sed -i 's/^CACHE_DRIVER=redis/CACHE_DRIVER=file/' .env
+ 1566  sed -i 's/^SESSION_DRIVER=redis/SESSION_DRIVER=file/' .env
+ 1567  grep -n "Redis\|redis" config/broadcasting.php config/cache.php config/database.php 2>/dev/null | grep -v "//\|#" | head -20
+ 1568  grep -rn "Redis\|redis\|broadcast\|pusher" app/Models/ScanLog.php app/Events/ app/Listeners/ 2>/dev/null | head -20
+ 1569  grep -n "broadcast\|event\|Redis" app/Services/Scanner/ScanOrchestrator.php | head -10
+ 1570  'client' => env('REDIS_CLIENT', 'phpredis'),
+ 1571  composer show predis/predis 2>/dev/null | head -3
+ 1572  echo "REDIS_CLIENT=predis" >> .env
+ 1573  php artisan optimize:clear
+ 1574  tail -f storage/logs/laravel.log | grep -i "redis\|error" | head -5
+ 1575  tail -f storage/logs/laravel.log | grep -v "Redis\|Class" | grep -i "saved\|found\|phase\|error\|warn"
+ 1576  php artisan tinker --execute="echo \App\Models\Vulnerability::where('scan_id', 19)->count();"
+ 1577  grep "21:09\|21:10" storage/logs/laravel.log | grep -v "Redis" | head -30
+ 1578  php artisan tinker --execute="
+ 1579  \$log = \App\Models\ScanLog::where('scan_id', 19)->first();
+ 1580  echo 'vuln_total: ' . \$log->vuln_total . '\n';
+ 1581  echo 'high: ' . \$log->high . '\n';
+ 1582  echo 'medium: ' . \$log->medium . '\n';
+ 1583  echo 'low: ' . \$log->low . '\n';
+ 1584  "
+ 1585  grep -n "syncVulnCounts\|vuln_total\|high\|medium\|low\|critical" app/Models/ScanLog.php | head -30
+ 1586  grep -n "dispatch\|RunScanJob\|RunScanCommand\|orchestrator\|start" app/Http/Controllers/Api/ScanController.php
+ 1587  grep -rn "start\|dispatch\|scan" resources/js/ --include="*.js" --include="*.vue" --include="*.jsx" --include="*.ts" | grep -i "start\|trigger\|submit\|click" | grep -v "node_modules" | head -20
+ 1588  grep -n "scan.*start\|start.*scan" routes/api.php routes/web.php 2>/dev/null
+ 1589  sed -n '245,285p' routes/api.php
+ 1590  sed -n '988,1005p' resources/js/Pages/VulnSight.jsx
+ 1591  grep -n "axios\|fetch\|post\|api\|/scans" resources/js/Pages/VulnSight.jsx | grep -i "start\|post\|dispatch" | head -20
+ 1592  grep -n "tick\|RunScanJob\|/start" resources/js/Pages/VulnSight.jsx | head -20
+ 1593  sed -n '1013,1060p' resources/js/Pages/VulnSight.jsx
+ 1594  grep -n "fetch\|axios\|router\.post\|\.post(\|\.get(" resources/js/Pages/VulnSight.jsx | head -30
+ 1595  wc -l resources/js/Pages/VulnSight.jsx
+ 1596  grep -n "fetch\|axios\|Inertia\|router\." resources/js/Pages/VulnSight.jsx | head -30
+ 1597  grep -n "scanHistory\|scan_logs\|ScanLog\|vuln_total\|vulnCount\|CHM\|URLs Found" resources/js/Pages/VulnSight.jsx | head -20
+ 1598  grep -rn "vuln_total\|scan_logs\|scanHistory\|CHM\|URLs Found\|duration\|completed" resources/js/ --include="*.jsx" --include="*.vue" --include="*.js" --include="*.ts" | grep -v "node_modules\|VulnSight" | head -20
+ 1599  find resources/js/Pages -name "*.jsx" -o -name "*.vue" -o -name "*.js" | grep -v node_modules
+ 1600  find resources/views -name "*.blade.php" | head -20
+ 1601  grep -n "scan_logs\|scanLogs\|scans\|vuln_total\|history" app/Http/Controllers/Api/ScanController.php | head -20
+ 1602  grep -rn "VulnSight\|vulnsight\|inertia\|Inertia" app/Http/Controllers/ | grep -v "Binary" | head -20
+ 1603  grep -n "scan\|history\|table\|duration\|completed\|ViewPDF" resources/js/Pages/VulnSight.jsx | head -40
+ 1604  cat resources/views/wavs.blade.php
+ 1605  grep -n "startScan\|RunScanJob\|/start\|dispatch\|scanTarget\|fetch\|XMLHttp" public/js/wavs.js | head -30
+ 1606  sed -n '577,660p' public/js/wavs.js
+ 1607  sed -n '315,340p' routes/api.php
+ 1608  grep -n "RunScanJob\|dispatch" routes/api.php
+ 1609  # See exact lines to edit
+ 1610  sed -n '330,345p' routes/api.php
+ 1611  # First confirm the exact line number of the dispatch inside zap/start
+ 1612  grep -n "RunScanJob::dispatch" routes/api.php
+ 1613  # Backup first
+ 1614  cp routes/api.php routes/api.php.bak
+ 1615  # View the zap route dispatch + return block to replace
+ 1616  sed -n '334,342p' routes/api.php
+ 1617  sed -i '337d' routes/api.php
+ 1618  grep -n "RunScanJob::dispatch" routes/api.php
+ 1619  grep "21:23\|21:24\|21:25\|21:26\|21:27\|21:28\|21:29\|21:30\|21:31\|21:32\|21:33\|21:34" storage/logs/laravel.log | grep -v "Redis" | head -40
+ 1620  grep "2026-03-01 13:2[3-9]\|2026-03-01 13:3[0-4]" storage/logs/laravel.log | grep -v "Redis" | head -40
+ 1621  php artisan tinker --execute="
+ 1622  \$s = \App\Models\Scan::find(23);
+ 1623  echo 'status: ' . \$s->status . '\n';
+ 1624  \$log = \App\Models\ScanLog::where('scan_id', 23)->first();
+ 1625  echo 'log status: ' . \$log->status . '\n';
+ 1626  echo 'vulns: ' . \App\Models\Vulnerability::where('scan_id', 23)->count() . '\n';
+ 1627  "
+ 1628  php artisan tinker --execute="
+ 1629  \$log = \App\Models\ScanLog::where('scan_id', 23)->first();
+ 1630  echo json_encode([
+ 1631      'vuln_total' => \$log->vuln_total,
+ 1632      'vuln_critical' => \$log->vuln_critical,
+ 1633      'vuln_high' => \$log->vuln_high,
+ 1634      'vuln_medium' => \$log->vuln_medium,
+ 1635      'vuln_low' => \$log->vuln_low,
+ 1636      'status' => \$log->status,
+ 1637      'duration_seconds' => \$log->duration_seconds,
+ 1638  ], JSON_PRETTY_PRINT);
+ 1639  "
+ 1640  grep -n "vuln_total\|vuln_count\|CHM\|interrupted\|duration\|status" public/js/wavs.js | head -20
+ 1641  grep -n "loadScanHistory\|renderHistory\|historyTabContent\|scan-history\|drawerScanCount\|hstat" public/js/wavs.js | head -20
+ 1642  grep -n "interrupted\|stopped\|vuln_total\|vuln_high\|vuln_medium\|vuln_low\|duration_seconds" public/js/wavs.js | head -20
+ 1643  sed -n '1164,1240p' public/js/wavs.js
+ 1644  grep -n "dbLoadHistory\|dbHistory\|_dbHistory\|scan-logs\|api/scan" public/js/wavs.js | head -20
+ 1645  grep -n "function dbLoadHistory" public/js/wavs.js
+ 1646  sed -n '1027,1045p' public/js/wavs.js
+ 1647  grep -n "scan-logs\|scanLogs\|scan_logs" routes/api.php | head -20
+ 1648  sed -n '405,432p' routes/api.php
+ 1649  sed -n '85,115p' app/Models/ScanLog.php
+ 1650  sed -n '875,900p' public/js/wavs.js
+ 1651  sed -n '1109,1150p' public/js/wavs.js
+ 1652  grep -n "vuln_total:  allVulns.length\|updateHistoryBadge();" public/js/wavs.js | head -10
+ 1653  grep -n "function archiveCurrentScan\|\/\/ Sync to DB\|dbUpdateScanLog({" public/js/wavs.js | head -10
+ 1654  # See exact end of archiveCurrentScan
+ 1655  sed -n '1139,1152p' public/js/wavs.js
+ 1656  sed -n '1139,1150p' public/js/wavs.js
+ 1657  sed -i '1145a\    \/\/ Refresh from DB so vuln counts reflect real scanner results\n    if (status === '"'"'completed'"'"' || status === '"'"'failed'"'"') {\n        setTimeout(async () => { try { const fresh = await apiFetch('"'"'\/api\/scan-logs'"'"'); if (Array.isArray(fresh)) { _dbHistory = fresh; updateHistoryBadge(); if (typeof loadScanHistoryTab === '"'"'function'"'"' \&\& document.getElementById('"'"'scan-history-tab'"'"').classList.contains('"'"'active'"'"')) loadScanHistoryTab(); } } catch(e) {} }, 2500);\n    }' public/js/wavs.js
+ 1658  # Insert after line 1145
+ 1659  python3 - <<'EOF'
+ 1660  with open('public/js/wavs.js', 'r') as f:
+ 1661      lines = f.readlines()
+ 1662  insert = """    // Refresh from DB so vuln counts reflect real scanner results, not fake animation
+ 1663      if (status === 'completed' || status === 'failed') {
+ 1664          setTimeout(async () => {
+ 1665              try {
+ 1666                  const fresh = await apiFetch('/api/scan-logs');
+ 1667                  if (Array.isArray(fresh)) {
+ 1668                      _dbHistory = fresh;
+ 1669                      updateHistoryBadge();
+ 1670                      const tab = document.getElementById('scan-history-tab');
+ 1671                      if (tab && tab.classList.contains('active')) loadScanHistoryTab();
+ 1672                  }
+ 1673              } catch(e) {}
+ 1674          }, 2500);
+ 1675      }
+ 1676  """
+ 1677  # Insert after the closing }); of dbUpdateScanLog inside archiveCurrentScan (line 1145, index 1144)
+ 1678  lines.insert(1145, insert)
+ 1679  with open('public/js/wavs.js', 'w') as f:
+ 1680      f.writelines(lines)
+ 1681  print("Done")
+ 1682  EOF
+ 1683  npm run build 2>/dev/null || echo "no build step needed"
+ 1684  # What vulns are actually in the DB?
+ 1685  php artisan tinker --execute="
+ 1686  \App\Models\Vulnerability::latest()->take(5)->get(['id','scan_id','name','severity','url','source'])->each(function(\$v){ echo \$v->id.' | '.\$v->scan_id.' | '.\$v->severity.' | '.\$v->source.' | '.\$v->name.'\n'; });
+ 1687  "
+ 1688  # What scanners are actually finding things?
+ 1689  grep "2026-03-01" storage/logs/laravel.log | grep -i "saved\|found\|finding\|psalm\|header\|static\|depend\|nikto\|nuclei" | grep -v Redis | tail -30
+ 1690  php artisan tinker --execute="
+ 1691  \App\Models\Vulnerability::latest()->take(3)->get(['id','scan_id','name','severity','url'])->each(function(\$v){ echo \$v->id.' | '.\$v->scan_id.' | '.\$v->severity.' | '.\$v->name.'\n'; });
+ 1692  "
+ 1693  php artisan tinker --execute="
+ 1694  \$cols = \Illuminate\Support\Facades\Schema::getColumnListing('vulnerabilities');
+ 1695  echo implode('\n', \$cols);
+ 1696  "
+ 1697  php artisan migrate:status | grep -i "pending\|No\|source"
+ 1698  php artisan make:migration add_source_to_vulnerabilities_table
+ 1699  php artisan migrate
+ 1700  grep -n "scan-logs.*vulnerabilities\|vulnerabilities.*post\|flushVuln\|_vulnBuffer" public/js/wavs.js | head -15
+ 1701  sed -n '1075,1092p' public/js/wavs.js
+ 1702  grep -rni "zap" . --include="*.php" --include="*.js" --include="*.blade.php" --include="*.env*" --include="*.yaml" -l
+ 1703  clear
+ 1704  ps aux | grep "queue:work"
+ 1705  grep QUEUE_CONNECTION ~/Documents/WORKSPACE/wavs2026/.env
+ 1706  mysql -u root -p wavs2026 -e "SELECT id, queue, attempts, available_at, created_at FROM jobs ORDER BY id DESC LIMIT 5;"
+ 1707  mysql -u root -p wavs2026 -e "SELECT id, queue, exception FROM failed_jobs ORDER BY id DESC LIMIT 3;"
+ 1708  tail -50 ~/Documents/WORKSPACE/wavs2026/storage/logs/laravel.log
+ 1709  tail -f ~/Documents/WORKSPACE/wavs2026/storage/logs/laravel.log
+ 1710  clear
+ 1711  php artisan serve
+ 1712  composer dump-autoload
+ 1713  php artisan serve
+ 1714  php artisan optimize:clear
+ 1715  php artisan serve
+ 1716  php artisan serve 2>&1 | tail -20
+ 1717  php artisan serve
+ 1718  lsof -i :8000
+ 1719  kill -9 7895
+ 1720  lsof -i :8000
+ 1721  kill -9 65155
+ 1722  php artisan serve
+ 1723  php artisan serve --port=8000 &
+ 1724  php artisan serve
+ 1725  clear
+ 1726  npm run dev
+ 1727  php artisan make:middleware ContentSecurityPolicy
+ 1728  php artisan config:clear && php artisan cache:clear
+ 1729  php artisan view:clear && php artisan cache:clear
+ 1730  cd Documents/WORKSPACE/wavs2026/
+ 1731  ps aux | grep nuclei
+ 1732  ls -la ~/Documents/WORKSPACE/wavs2026/storage/app/nuclei_stderr_*.txt 2>/dev/null
+ 1733  cat ~/Documents/WORKSPACE/wavs2026/storage/app/nuclei_stderr_*.txt 2>/dev/null
+ 1734  ps aux | grep "artisan serve"
+ 1735  rm -f ~/.cache/nuclei/resume-*.cfg
+ 1736  /home/jeycee/go/bin/nuclei -u http://localhost:8000   -tags headers,misconfig,exposure,laravel,php,debug,config   -exclude-tags oast,blind,dos,fuzzing,intrusive   -no-interactsh -duc -nc -severity low,medium,high,critical   -timeout 5 -rate-limit 30 -max-host-error 3   -stats 2>&1 | tail -20
+ 1737  jeycee@jeycee:~/Documents/WORKSPACE/wavs2026$ /home/jeycee/go/bin/nuclei -u http://localhost:8000   -tags headers,misconfig,exposure,laravel,php,debug,config   -exclude-tags oast,blind,dos,fuzzing,intrusive   -no-interactsh -duc -nc -severity low,medium,high,critical   -timeout 5 -rate-limit 30 -max-host-error 3   -stats 2>&1 | tail -20
+ 1738  [0:00:50] | Templates: 1396 | Hosts: 1 | RPS: 34 | Matched: 0 | Errors: 127 | Requests: 1736/4203 (41%)
+ 1739  [0:00:55] | Templates: 1396 | Hosts: 1 | RPS: 34 | Matched: 0 | Errors: 127 | Requests: 1895/4203 (45%)
+ 1740  [0:01:00] | Templates: 1396 | Hosts: 1 | RPS: 33 | Matched: 0 | Errors: 127 | Requests: 2045/4203 (48%)
+ 1741  [0:01:05] | Templates: 1396 | Hosts: 1 | RPS: 33 | Matched: 0 | Errors: 127 | Requests: 2195/4203 (52%)
+ 1742  [0:01:10] | Templates: 1396 | Hosts: 1 | RPS: 33 | Matched: 0 | Errors: 127 | Requests: 2345/4203 (55%)
+ 1743  [0:01:15] | Templates: 1396 | Hosts: 1 | RPS: 33 | Matched: 0 | Errors: 127 | Requests: 2495/4203 (59%)
+ 1744  [0:01:20] | Templates: 1396 | Hosts: 1 | RPS: 32 | Matched: 0 | Errors: 127 | Requests: 2645/4203 (62%)
+ 1745  [0:01:25] | Templates: 1396 | Hosts: 1 | RPS: 32 | Matched: 0 | Errors: 127 | Requests: 2770/4203 (65%)
+ 1746  [0:01:30] | Templates: 1396 | Hosts: 1 | RPS: 32 | Matched: 0 | Errors: 127 | Requests: 2938/4203 (69%)
+ 1747  [0:01:35] | Templates: 1396 | Hosts: 1 | RPS: 32 | Matched: 0 | Errors: 127 | Requests: 3088/4203 (73%)
+ 1748  [0:01:40] | Templates: 1396 | Hosts: 1 | RPS: 32 | Matched: 0 | Errors: 127 | Requests: 3238/4203 (77%)
+ 1749  [0:01:45] | Templates: 1396 | Hosts: 1 | RPS: 32 | Matched: 0 | Errors: 127 | Requests: 3388/4203 (80%)
+ 1750  [0:01:50] | Templates: 1396 | Hosts: 1 | RPS: 32 | Matched: 0 | Errors: 127 | Requests: 3538/4203 (84%)
+ 1751  [0:01:55] | Templates: 1396 | Hosts: 1 | RPS: 31 | Matched: 0 | Errors: 127 | Requests: 3638/4203 (86%)
+ 1752  [0:02:00] | Templates: 1396 | Hosts: 1 | RPS: 31 | Matched: 0 | Errors: 127 | Requests: 3788/4203 (90%)
+ 1753  [0:02:05] | Templates: 1396 | Hosts: 1 | RPS: 31 | Matched: 0 | Errors: 127 | Requests: 3938/4203 (93%)
+ 1754  [0:02:10] | Templates: 1396 | Hosts: 1 | RPS: 31 | Matched: 0 | Errors: 127 | Requests: 4088/4203 (97%)
+ 1755  [0:02:14] | Templates: 1396 | Hosts: 1 | RPS: 31 | Matched: 0 | Errors: 127 | Requests: 4193/4203 (99%)
+ 1756  [INF] Scan completed in 2m. 0 matches found.
+ 1757  [0:02:14] | Templates: 1396 | Hosts: 1 | RPS: 31 | Matched: 0 | Errors: 127 | Requests: 4193/4203 (99%)
+ 1758  # See what template folders you have
+ 1759  ls ~/.local/nuclei-templates/ 2>/dev/null || ls ~/nuclei-templates/ 2>/dev/null || find ~ -name "nuclei-templates" -type d 2>/dev/null | head -5
+ 1760  tail -30 ~/Documents/WORKSPACE/wavs2026/storage/logs/laravel.log
+ 1761  clear
+ 1762  curl http://localhost:8000/.env
+ 1763  curl http://localhost:8000/.git/HEAD
+ 1764  curl http://localhost:8000/.git/config
+ 1765  curl -I http://localhost:8000 | grep -i "content-security-policy"
+ 1766  grep -r "unsafe-eval\|unsafe-inline\|Content-Security-Policy" ~/Documents/WORKSPACE/wavs2026/app/Http/Middleware/ 2>/dev/null
+ 1767  grep -n "verifyHttpAccessible" ~/Documents/WORKSPACE/wavs2026/app/Services/Scanner/ExposedPathScanner.php
+ 1768  clear
+ 1769  curl -I http://localhost:8000 | grep -i content-security-policy
+ 1770  grep -r "unsafe-inline\|unsafe-eval\|Content-Security-Policy" ~/Documents/WORKSPACE/wavs2026 --include="*.py" --include="*.js" --include="*.ts" --include="*.conf" -l
+ 1771  grep -r "Content-Security-Policy\|unsafe-inline\|unsafe-eval" ~/Documents/WORKSPACE/wavs2026 --exclude-dir=node_modules -l
+ 1772  composer dump-autoload
+ 1773  php artisan optimize:clear
+ 1774  php artisan config:clear
+ 1775  php artisan cache:clear
+ 1776  php artisan serve 2>&1 | tail -20
+ 1777  clear
+ 1778  tail -50 ~/Documents/WORKSPACE/wavs2026/storage/logs/laravel.log
+ 1779  ps aux | grep -E "nuclei|nikto|php" | grep -v grep
+ 1780  tail -100 ~/Documents/WORKSPACE/wavs2026/storage/logs/laravel.log | grep -A5 "Scan #44"
+ 1781  pkill -f nuclei; pkill -f nikto
+ 1782  pkill -f "artisan serve"
+ 1783  php -S localhost:8000 -t public/ &
+ 1784  pkill -f "php8.3 -S"; sleep 1
+ 1785  clear
+ 1786  grep -r "unsafe-inline" app/ config/ bootstrap/ --include="*.php" -l
+ 1787  curl -I http://localhost:8000
+ 1788  grep -r "QUEUE_CONNECTION\|dispatch\|Queue" ~/Documents/WORKSPACE/wavs2026/.env | head -5
+ 1789  clear
+ 1790  tail -50 storage/logs/laravel.log
+ 1791  php artisan optimize:clear
+ 1792  tail -30 storage/logs/laravel.log
+ 1793  grep "production.ERROR" storage/logs/laravel.log | tail -3
+ 1794  php artisan optimize:clear
+ 1795  grep -n "plan" resources/js/wavs_admin.js
+ 1796  find . -name "wavs_admin.js" -not -path "*/node_modules/*" -not -path "*/vendor/*"
+ 1797  grep -n "plan" ./public/js/wavs_admin.js
+ 1798  sed -i "s/plan:             u.plan || u.subscription_plan || u.plan_name || 'free',/plan:             'free',/" public/js/wavs_admin.js
+ 1799  sed -i "/u\.plan  = plan;/d" public/js/wavs_admin.js
+ 1800  sed -i "s/{...x, name, email, role, plan, avatar:/{...x, name, email, role, avatar:/" public/js/wavs_admin.js
+ 1801  grep -n "plan" public/js/wavs_admin.js
+ 1802  php artisan make:migration add_banned_at_to_users_table
+ 1803  php artisan migrate
+ 1804  php artisan optimize:clear
+ 1805  php artisan route:clear
+ 1806  php artisan cache:clear
+ 1807  // ═══════════════════════════════════════════════════════════
+ 1808  //  SHARED API LAYER — identical pattern to wavs_blade.php
+ 1809  // ═══════════════════════════════════════════════════════════
+ 1810  let currentAdmin = null;
+ 1811  function getCsrfToken() {     const match = document.cookie.match(/(?:^|;\s*)XSRF-TOKEN=([^;]+)/);
+ 1812  }
+ 1813  async function apiFetch(url, options = {}) {
+ 1814  }
+ 1815  // ───────────────────────────────────────────────────────────
+ 1816  //  SESSION GUARD — redirect non-admins back to the scanner
+ 1817  // ───────────────────────────────────────────────────────────
+ 1818  (function checkAdminSession() {     async function tryRestore() {
+ 1819  })();
+ 1820  async function doAdminSignOut() {
+ 1821  }
+ 1822  // ───────────────────────────────────────────────────────────
+ 1823  //  NO MOCK DATA — all data comes from the real database API
+ 1824  // ───────────────────────────────────────────────────────────
+ 1825  // Live mutable state — filled by initAdmin()
+ 1826  let USERS = [], SCANS = [], VULNS_SAMPLE = [], auditData = [];
+ 1827  // ───────────────────────────────────────────────────────────
+ 1828  //  INIT — parallel fetch from real API, no fake fallback
+ 1829  // ───────────────────────────────────────────────────────────
+ 1830  async function initAdmin() {
+ 1831  }
+ 1832  // Spinner while data loads
+ 1833  const _spinStyle = document.createElement('style');
+ 1834  _spinStyle.textContent = '@keyframes spin{to{transform:rotate(360deg)}}';
+ 1835  document.head.appendChild(_spinStyle);
+ 1836  function setLoading(on) {
+ 1837  }
+ 1838  // Poll active scans every 8 s for live progress + refresh full list every 30s
+ 1839  let _scanPollCount = 0;
+ 1840  async function pollRunningScans() {
+ 1841  }
+ 1842  // ───────────────────────────────────────────────────────────
+ 1843  //  NORMALISERS — map any Laravel resource shape to internal shape
+ 1844  // ───────────────────────────────────────────────────────────
+ 1845  const AVATAR_COLORS = [
+ 1846  ];
+ 1847  function normalizeUsers(data) {
+ 1848  }
+ 1849  function normalizeScans(data) {
+ 1850  };
+ 1851  function normalizeVulns(data) {
+ 1852  }
+ 1853  function normalizeAudit(data) {
+ 1854  }
+ 1855  function normalizeServices(data) {
+ 1856  }
+ 1857  // ─────────────────────────────────────────────────
+ 1858  //  HTML ESCAPE helper (prevent XSS in rendered data)
+ 1859  // ─────────────────────────────────────────────────
+ 1860  function esc(str) {
+ 1861  }
+ 1862  // ═══════════════════════════════════════════════════════════
+ 1863  //  TABS
+ 1864  // ═══════════════════════════════════════════════════════════
+ 1865  const TAB_TITLES = {
+ 1866  };
+ 1867  function switchTab(name) {
+ 1868  }
+ 1869  // ═══════════════════════════════════════════════════════════
+ 1870  //  USERS
+ 1871  // ═══════════════════════════════════════════════════════════
+ 1872  let filteredUsers = [];
+ 1873  function renderUsers(list) {
+ 1874  }
+ 1875  function banUser(id) {
+ 1876  }
+ 1877  function unbanUser(id) {
+ 1878  }
+ 1879  // ═══════════════════════════════════════════════════════════
+ 1880  //  SCANS
+ 1881  // ═══════════════════════════════════════════════════════════
+ 1882  let filteredScans = [];
+ 1883  function renderScans(list) {
+ 1884  }
+ 1885  // ═══════════════════════════════════════════════════════════
+ 1886  //  VULNERABILITY REPORTS  (per-user grouped + PDF export)
+ 1887  // ═══════════════════════════════════════════════════════════
+ 1888  let filteredReports = [];
+ 1889  let _reportSevFilter  = 'all';
+ 1890  let _reportUserFilter = '';
+ 1891  /* ─── Grouped render ─── */
+ 1892  function renderReports(list) {
+ 1893  <div style="margin-bottom:20px;border:1.5px solid ${s.border};border-radius:10px;overflow:hidden;page-break-inside:avoid;">
+ 1894  </div>`;
+ 1895      }).join('');
+ 1896      /* ── Findings summary table rows (with Owner column) ── */
+ 1897      const tableRows = sorted.map((v,i) => {
+ 1898          const s = SEV[v.severity]||SEV.low;
+ 1899          return `<tr style="background:${i%2===0?'#ffffff':'#f9fafb'};">
+ 1900  }
+ 1901  function _openPDFWindow(html) {
+ 1902  }
+ 1903  function exportUserPDF(userName) {
+ 1904  }
+ 1905  function exportPlatformReportPDF() {     const list  = (filteredReports && filteredReports.length) ? filteredReports : VULNS_SAMPLE;
+ 1906  }
+ 1907  /* alias — remove old CSV export (replaced by PDF) */
+ 1908  function exportPlatformReport() { exportPlatformReportPDF(); }
+ 1909  // ═══════════════════════════════════════════════════════════
+ 1910  //  AUDIT LOG
+ 1911  // ═══════════════════════════════════════════════════════════
+ 1912  function renderAuditLog(list) {
+ 1913  }
+ 1914  // ═══════════════════════════════════════════════════════════
+ 1915  //  SERVICES
+ 1916  // ═══════════════════════════════════════════════════════════
+ 1917  function renderServices(list) {
+ 1918  }
+ 1919  // ═══════════════════════════════════════════════════════════
+ 1920  //  OVERVIEW WIDGETS
+ 1921  // ═══════════════════════════════════════════════════════════
+ 1922  function renderRecentSignups() {     const el = document.getElementById('recentSignupsList');
+ 1923  }
+ 1924  // ═══════════════════════════════════════════════════════════
+ 1925  //  LIVE SYSTEM TICKER (animates CPU / workers / API RPM)
+ 1926  // ═══════════════════════════════════════════════════════════
+ 1927  // Stable baseline values — drift slowly instead of jumping randomly every 3s
+ 1928  const _live = { cpu: 34, workers: 6, queue: 12, rpm: 847 };
+ 1929  function tickLive() {     // Nudge each value by ±1 within a realistic range — no wild jumps;     _live.cpu     = Math.min(85, Math.max(18, _live.cpu     + (Math.random() > 0.5 ? 1 : -1)));
+ 1930  }
+ 1931  // ═══════════════════════════════════════════════════════════
+ 1932  //  ADD USER (real API + optimistic UI update)
+ 1933  // ═══════════════════════════════════════════════════════════
+ 1934  async function addUser() {
+ 1935  }
+ 1936  // ═══════════════════════════════════════════════════════════
+ 1937  //  SETTINGS
+ 1938  // ═══════════════════════════════════════════════════════════
+ 1939  // Snapshot of last-saved settings for change diffing
+ 1940  let _lastSettings = {};
+ 1941  // Human-readable labels for each setting key
+ 1942  const SETTING_LABELS = {
+ 1943  cd Documents/WORKSPACE/wavs2026/
+ 1944  nikto -h http://localhost:8000\
+ 1945  history > my_terminal_history.txt
